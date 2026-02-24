@@ -7,16 +7,19 @@ from menu.serializers import CategorySerializer
 from .models import Order
 from .serializers import OrderSerializer
 from .services import place_order
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 # List all menu categories with items
 class MenuListView(generics.ListAPIView):
+    permission_classes = [AllowAny]
     queryset = Category.objects.prefetch_related("items__menuitemingredient_set__ingredient").all()
     serializer_class = CategorySerializer
 
 
 # Create order endpoint
 class PlaceOrderView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
         user = request.user
         branch_id = request.data.get("branch_id")
@@ -35,6 +38,7 @@ class PlaceOrderView(APIView):
 
 # List user orders
 class UserOrdersView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = OrderSerializer
 
     def get_queryset(self):
