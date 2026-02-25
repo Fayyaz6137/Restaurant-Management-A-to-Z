@@ -25,19 +25,35 @@ class PlaceOrderView(APIView):
     def post(self, request, *args, **kwargs):
         user = request.user
         branch_id = request.data.get("branch_id")
-        branch = Branch.objects.get(id=branch_id, is_active=True)
-        items_data = request.data.get("items")  # list of {"menu_item_id": X, "quantity": Y}
+        items_data = request.data.get("items")
 
         if not branch_id or not items_data:
-            return Response({"error": "branch_id and items are required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "branch_id and items are required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Fetch the Branch instance
+        try:
+            branch = Branch.objects.get(id=branch_id, is_active=True)
+        except Branch.DoesNotExist:
+            return Response(
+                {"error": "Branch does not exist or is inactive"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         try:
             order = place_order(user, branch, items_data)
             serializer = OrderSerializer(order)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except MenuItem.DoesNotExist:
+            return Response(
+                {"error": "One of the menu items does not exist or is unavailable"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         except Exception as e:
             return Response(
-                {"error": "Order could not be processed"},
+                {f"{e} error": "Order could not be processed"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 

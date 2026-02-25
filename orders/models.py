@@ -7,7 +7,6 @@ from menu.models import MenuItem
 
 
 class Order(models.Model):
-
     STATUS_CHOICES = (
         ("pending", "Pending"),
         ("paid", "Paid"),
@@ -63,7 +62,8 @@ class OrderItem(models.Model):
 
     menu_item = models.ForeignKey(
         MenuItem,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        related_name="order_items"
     )
 
     quantity = models.PositiveIntegerField()
