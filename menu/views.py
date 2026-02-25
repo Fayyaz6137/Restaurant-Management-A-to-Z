@@ -11,12 +11,12 @@ class MenuListView(generics.ListAPIView):
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        # cached = cache.get("menu_cache")
-        # if cached:
-        #     return cached
+        cached = cache.get("menu_cache")
+        if cached:
+            return cached
 
         queryset = Category.objects.prefetch_related("items__menuitemingredient_set__ingredient").all()
-        # cache.set("menu_cache", queryset, timeout=60 * 60)  # cache for 1 hour
+        cache.set("menu_cache", queryset, timeout=60 * 60)  # cache for 1 hour
         return queryset
 
 
