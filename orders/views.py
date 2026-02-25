@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics, status
+from django.core.cache import cache
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from menu.models import Category, MenuItem
@@ -10,12 +11,6 @@ from .services import place_order
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from restaurants.models import Branch
 
-
-# List all menu categories with items
-class MenuListView(generics.ListAPIView):
-    permission_classes = [AllowAny]
-    queryset = Category.objects.prefetch_related("items__menuitemingredient_set__ingredient").all()
-    serializer_class = CategorySerializer
 
 
 # Create order endpoint
