@@ -24,7 +24,8 @@ class Category(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    calories_per_unit = models.FloatField()
+    stock_quantity = models.FloatField(default=0)  # track available quantity
+    unit = models.CharField(max_length=20, default="pcs")  # kg, pcs, liters etc.
 
     def __str__(self):
         return self.name
@@ -58,13 +59,12 @@ class MenuItem(models.Model):
 
 
 class MenuItemIngredient(models.Model):
-    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE, related_name='menuitemingredient_set')
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-
     quantity_required = models.FloatField()
 
     class Meta:
         unique_together = ("menu_item", "ingredient")
 
     def __str__(self):
-        return f"{self.menu_item.name} - {self.ingredient.name}"
+        return f"{self.menu_item.name} → {self.ingredient.name} ({self.quantity_required})"
