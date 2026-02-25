@@ -26,9 +26,14 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=100, unique=True)
     stock_quantity = models.FloatField(default=0)  # track available quantity
     unit = models.CharField(max_length=20, default="pcs")  # kg, pcs, liters etc.
+    low_stock_threshold = models.FloatField(default=10)  # alert if below this
 
     def __str__(self):
         return self.name
+
+    @property
+    def is_low_stock(self):
+        return self.stock_quantity <= self.low_stock_threshold
 
 
 class MenuItem(models.Model):
@@ -68,3 +73,21 @@ class MenuItemIngredient(models.Model):
 
     def __str__(self):
         return f"{self.menu_item.name} → {self.ingredient.name} ({self.quantity_required})"
+
+class Supplier(models.Model):
+    name = models.CharField(max_length=200)
+    contact_email = models.EmailField(blank=True, null=True)
+    contact_phone = models.CharField(max_length=20, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+class PurchaseOrder(models.Model):
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    quantity_ordered = models.FloatField()
+    received = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.ingredient.name} → {self.quantity_ordered} from {self.supplier.name}"
