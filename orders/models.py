@@ -19,7 +19,8 @@ class Order(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="orders"
+        related_name="orders",
+        db_index=True
     )
 
     branch = models.ForeignKey(
@@ -40,7 +41,7 @@ class Order(models.Model):
         default=0
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         indexes = [
@@ -63,7 +64,9 @@ class OrderItem(models.Model):
     menu_item = models.ForeignKey(
         MenuItem,
         on_delete=models.PROTECT,
-        related_name="order_items"
+        related_name="order_items",
+        db_index=True
+
     )
 
     quantity = models.PositiveIntegerField()
