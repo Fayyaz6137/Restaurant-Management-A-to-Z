@@ -1,19 +1,19 @@
 from django.db import models
 
 from django.db import models
-from restaurants.models import Branch
+# from restaurants.models import Branch
 
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
-    branch = models.ForeignKey(
-        Branch,
-        on_delete=models.CASCADE,
-        related_name="categories"
-    )
+    # branch = models.ForeignKey(
+    #     Branch,
+    #     on_delete=models.CASCADE,
+    #     related_name="categories"
+    # )
 
     class Meta:
-        unique_together = ("name", "branch")
+        # unique_together = ("name", "branch")
         indexes = [
             models.Index(fields=["name"]),
         ]

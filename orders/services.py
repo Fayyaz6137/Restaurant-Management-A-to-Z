@@ -1,5 +1,7 @@
 from django.db import transaction
 from decimal import Decimal
+
+from restaurants.models import BranchInventory
 from .models import Order, OrderItem
 from menu.models import MenuItem, MenuItemIngredient
 
@@ -22,17 +24,26 @@ def place_order(user, branch, items_data):
 
         menu_item = MenuItem.objects.select_for_update().get(id=menu_item_id)
 
+
+
+
+
         # check stock for all ingredients
         ingredients = MenuItemIngredient.objects.filter(menu_item=menu_item).select_for_update()
         for mi in ingredients:
             required = mi.quantity_required * quantity
-            if mi.ingredient.stock_quantity < required:
-                raise ValueError(f"Insufficient stock for {mi.ingredient.name}")
+            # Get branch inventory row
+            branch_inventory = BranchInventory.objects.select_for_update().filter(
+                branch=branch,
+                ingredient=mi.ingredient
+            ).first()
 
-        # Deduct ingredients
-        for mi in ingredients:
-            mi.ingredient.stock_quantity -= mi.quantity_required * quantity
-            mi.ingredient.save()
+            if not branch_inventory or branch_inventory.stock_quantity < required:
+                raise ValueError(f"Insufficient stock for {mi.ingredient.name} at {branch.name}")
+
+            # Deduct stock
+            branch_inventory.stock_quantity -= required
+            branch_inventory.save()
 
         # Create OrderItem
         OrderItem.objects.create(
