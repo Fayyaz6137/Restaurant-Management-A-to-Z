@@ -33,13 +33,13 @@ This system is built with **enterprise-level engineering principles** in mind.
 # 🏗 Architecture Overview
 ```bash
 Client (React Frontend)
-↓
+            ↓
 Django REST API (DRF + JWT)
-↓
+            ↓
 PostgreSQL Database
-↓
+            ↓
 Redis (Caching + Celery Broker)
-↓
+            ↓
 Celery Workers (Async Tasks)
 ```
 
@@ -142,7 +142,7 @@ Handled using:
 Prevents race conditions and overselling inventory.
 
 ---
-## 🔐 Authentication & API Design
+# 🔐 Authentication & API Design
 
 JWT Authentication
 
@@ -160,7 +160,7 @@ Authorization: Bearer <access_token>
 
 ---
 
-## 🐳 Dockerized Setup
+# 🐳 Dockerized Setup
 
 Includes:
 
@@ -174,7 +174,7 @@ Run everything with:
 docker-compose up --build
 ```
 ---
-## 📂 Project Structure
+# 📂 Project Structure
 ```bash
 restaurant-erp/
 │
@@ -209,7 +209,7 @@ restaurant-erp/
 ```
 
 ---
-## ⚙️ Tech Stack
+# ⚙️ Tech Stack
 
 * Python 3.11+
 * Django
@@ -221,7 +221,7 @@ restaurant-erp/
 * Docker
 ---
 
-## 📊 Production-Level Considerations
+# 📊 Production-Level Considerations
 
 This project demonstrates:
 
@@ -233,7 +233,7 @@ This project demonstrates:
 * Containerized deployment
 ---
 
-## 🔧 Running Locally (Without Docker)
+# 🔧 Running Locally (Without Docker)
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -247,7 +247,7 @@ celery -A config worker --loglevel=info
 Ensure PostgreSQL and Redis are running.
 ```
 ---
-## 🧩 Future Improvements
+# 🧩 Future Improvements
 
 * Kubernetes deployment
 * CI/CD pipeline
@@ -257,7 +257,7 @@ Ensure PostgreSQL and Redis are running.
 
 ---
 
-## 🎯 What This Project Demonstrates
+# 🎯 What This Project Demonstrates
 
 This is not just a restaurant ordering system.
 
