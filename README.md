@@ -174,7 +174,7 @@ Run everything with:
 docker-compose up --build
 ```
 ---
-# 📂 Project Structure
+# 🗂 Project Structure
 ```bash
 restaurant-erp/
 │
