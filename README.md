@@ -94,8 +94,6 @@ Branch → Ingredient → Stock Quantity
 ```
 This mirrors real ERP-style inventory control.
 
----
-
 ## 3️⃣ Scalability Features
 ### 🔹 Redis Caching
 
