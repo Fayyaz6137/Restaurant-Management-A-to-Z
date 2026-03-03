@@ -24,10 +24,6 @@ def place_order(user, branch, items_data):
 
         menu_item = MenuItem.objects.select_for_update().get(id=menu_item_id)
 
-
-
-
-
         # check stock for all ingredients
         ingredients = MenuItemIngredient.objects.filter(menu_item=menu_item).select_for_update()
         for mi in ingredients:
